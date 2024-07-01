@@ -42,26 +42,38 @@ def get_task(id):
 
 @app.route("/tasks/<int:id>", methods=["PUT"])
 def update_task(id):
+    searched_task = None
     user_payload = request.get_json()
-    print(user_payload)
 
     for task in task_list:
         if task.id == id:
-            task.title = user_payload["title"]
-            task.description = user_payload["description"]
-            task.completed = user_payload["completed"]
-        return jsonify({"message": "Task updated successfully!"})
+            searched_task = task
+            break
+    
+    if not searched_task:
+        return jsonify({"message": "Task not found!"}), 404
 
-    return jsonify({"message": "Task not found!"}), 404
+    searched_task.title = user_payload["title"]
+    searched_task.description = user_payload["description"]
+    searched_task.completed = user_payload["completed"]
+
+    return jsonify({"message": "Task updated successfully!"})
+
 
 @app.route("/tasks/<int:id>", methods=["DELETE"])
 def delete_task(id):
+    searched_task = None
+
     for task in task_list:
         if task.id == id:
-            task_list.remove(task)
-            return jsonify({"message": "Task deleted successfully!"})
+            searched_task = task
+            break
+    
+    if not searched_task:
+        return jsonify({"message": "Task not found!"}), 404
 
-    return jsonify({"message": "Task not found!"}), 404
+    task_list.remove(searched_task)
+    return jsonify({"message": "Task deleted successfully!"}), 404
 
 if __name__ == "__main__":
     app.run(debug=True)
