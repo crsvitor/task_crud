@@ -73,7 +73,7 @@ def delete_task(id):
         return jsonify({"message": "Task not found!"}), 404
 
     task_list.remove(searched_task)
-    return jsonify({"message": "Task deleted successfully!"}), 404
+    return jsonify({"message": "Task deleted successfully!"})
 
 if __name__ == "__main__":
     app.run(debug=True)
